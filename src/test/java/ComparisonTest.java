@@ -1,7 +1,4 @@
-import org.example.Graph;
-import org.example.Helper;
-import org.example.ShortestPath;
-import org.example.TestResult;
+import org.example.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -220,26 +217,87 @@ void SampleTestCase() //sheet ex 2
 
     @Test
     void hello(){
-        double[][] adjList = {
-                {0, 32, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 3, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 3, 0, 0, 0},
-                {0, 0, 0, 3, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0},
-                {43, 0, 0, 0, 0, 0, 2, 55, 0, 3, 0, 0, 0, 0, 0, 0},
-                {0, 3, 0, 2, 5, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0},
-                {0, 2, 0, 1, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 1, 0, 0, 0, 2, 32, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 35, 32, 0, 1, 2, 0},
-                {0, 0, 0, 4, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0},
-                {0, 0, 0, 0, 0, 0, 3, 0, 2, 0, 0}
+
+        double[][] adjMatrix = {
+                {0, 32, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 3, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 3, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3},
+                {0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 1, 0, 0, 0, 0},
+                {0, 0, 2, 0, 43, 0, 0, 0, 0, 0, 2, 55, 0, 3, 0},
+                {0, 0, 0, 0, 0, 0, 3, 0, 2, 5, 0, 0, 0, 0, 0},
+                {3, 2, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0},
+                {22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 0, 0, 0, 2, 32, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 35, 32, 0},
+                {1, 2, 0, 0, 0, 4, 0, 0, 33, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                {0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0}
         };
-//        ArrayList<ArrayList<E>>
-//        Graph graph = new Graph(15,adjList,new ArrayList<>());
-//        for(int i =0 ;i<15;i++)
+
+
+        double[][] cost = {
+                {0, 7, 3, 9, 4, 2, 5, 5, 5, 6, 3, 60, 9, 6, 7},
+                {11, 0, 14, 10, 5, 13, 16, 13, 11, 12, 9, 71, 10, 7, 8},
+                {11, 10, 0, 12, 7, 5, 8, 8, 8, 9, 6, 63, 12, 9, 10},
+                {4, 3, 7, 0, 2, 4, 7, 7, 7, 8, 5, 62, 3, 4, 5},
+                {6, 7, 9, 5, 0, 8, 11, 8, 6, 7, 4, 66, 5, 2, 3},
+                {6, 5, 5, 7, 2, 0, 3, 3, 3, 4, 1, 58, 7, 4, 5},
+                {7, 6, 2, 7, 3, 7, 0, 6, 4, 5, 2, 55, 7, 3, 5},
+                {5, 4, 5, 10, 6, 7, 3, 0, 2, 3, 5, 58, 10, 6, 8},
+                {3, 2, 6, 12, 7, 5, 5, 2, 0, 1, 6, 60, 12, 8, 10},
+                {22, 29, 25, 31, 26, 24, 27, 27, 27, 0, 25, 82, 31, 28, 29},
+                {5, 4, 8, 6, 1, 7, 7, 4, 2, 3, 0, 62, 6, 3, 4},
+                {8, 7, 11, 9, 4, 10, 10, 7, 5, 6, 3, 0, 9, 6, 7},
+                {1, 2, 4, 10, 5, 3, 6, 6, 6, 7, 4, 61, 0, 7, 8},
+                {5, 6, 8, 4, 4, 7, 10, 7, 5, 6, 3, 65, 4, 0, 2},
+                {3, 4, 6, 2, 2, 5, 8, 5, 3, 4, 1, 63, 2, 4, 0}
+        };
+
+
+        ArrayList<ArrayList<Edge>> adjList = new ArrayList<>(15);
+        for(int i = 0;i<15;i++){
+            adjList.add(new ArrayList<>());
+        }
+        for(int i =0 ;i<15;i++){
+            for(int j =0 ;j<15;j++){
+                if(adjMatrix[i][j] != 0){
+                    adjList.get(i).add(new Edge(i,j,adjMatrix[i][j]));
+                }
+            }
+
+        }
+        Graph graph = new Graph(15,adjMatrix,adjList,false,false);
+
+        double[][] costBellman = new double[15][15];
+        double[][] costFloyd = new double[15][15];
+        double[][] costDijkesrtra = new double[15][15];
+
+        Integer[][] precBellman = new Integer[15][15];
+        Integer[][] precFloyd = new Integer[15][15];
+        Integer[][] precdijkestra = new Integer[15][15];
+
+        TestResult floydTestResult = Helper.testAlgorithm(graph,costFloyd, precFloyd);
+        double bellmanTime = 0;
+        double dijkestraTime = 0;
+        for(int i = 0;i<15;i++){
+            TestResult test =  Helper.testAlgorithm(graph,i,costBellman[i],precBellman[i],"bellman");
+            bellmanTime+=test.spendTime;
+            TestResult test2  = Helper.testAlgorithm(graph,i,costDijkesrtra[i],precdijkestra[i],"optimalDijkstra");
+            dijkestraTime+= test2.spendTime;
+        }
+        for(int i=0;i<15;i++){
+            assertArrayEquals(costBellman[i],cost[i]);
+            assertArrayEquals(costDijkesrtra[i],cost[i]);
+            assertArrayEquals(costFloyd[i],cost[i]);
+        }
+        System.out.println("Total time for Large graph Using Optimal Dijkstra: " + dijkestraTime+ " ms");
+        System.out.println("Total time for graph Using Bellman-ford: " + bellmanTime+ " ms");
+        System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
+
+
+
 
 
 
