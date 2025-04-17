@@ -35,11 +35,12 @@ void APSP(){
             {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 0.0}// from node 4
     };
 
-    double[][] cost = new double[size][size];
+    double[][] costFloyd = new double[size][size];
     double totalTimeNormal = 0;
     double totalTimeOptimal = 0;
     double totalTimeBellman = 0;
-
+    Integer[][] predecessors = new Integer[size][size];
+    TestResult testFloyd = Helper.testAlgorithm(graph,costFloyd,predecessors);
     for(int source = 0; source < size; source++) {
         Integer[] parent = new Integer[size];
         double[] costOptimal = new double[size];
@@ -52,15 +53,18 @@ void APSP(){
         totalTimeNormal += testResultNormalDijkstra.spendTime;
         totalTimeOptimal += testResultOptimalDijkstra.spendTime;
         totalTimeBellman += testResultBellman.spendTime;
+        assertArrayEquals(costBell ,costFloyd[source] , "Test Fails With at Source "+source +" BellMan-Ford");
+        assertArrayEquals(costNormal ,costFloyd[source],"Test Fails With at Source "+source +" Dijkstra-Normal");
+        assertArrayEquals(costOptimal ,costFloyd[source],"Test Fails With at Source "+source +" Dijkstra-Optimal");
 
 
     }
-    Integer[][] predecessors = new Integer[size][size];
-    TestResult testFloyd = Helper.testAlgorithm(graph,cost,predecessors);
+
     System.out.println("Total time for all-pairs Using Normal Dijkstra: " + totalTimeNormal + " ms");
     System.out.println("Total time for all-pairs Using Optimal Dijkstra: " + totalTimeOptimal + " ms");
     System.out.println("Total time for all-pairs Using Bellman-ford: " + totalTimeBellman + " ms");
     System.out.println("Total time for all-pairs Using Floyd: " + testFloyd.spendTime + " ms");
+
 
 
 
@@ -135,7 +139,7 @@ void SampleTestCase() //sheet ex 2
     void largeGraphTest() {
         System.out.println("===================================================== Large Graph Test ======================================================================");
         int size = 1000;
-        int source = 0;
+
         Graph graph = new Graph(size);
 
         for(int i = 0; i < size-1; i++) {
@@ -144,7 +148,6 @@ void SampleTestCase() //sheet ex 2
             }
         }
 
-
         Integer[] parent = new Integer[size];
         double[] costOptimal = new double[size];
         double[] costNormal = new double[size];
@@ -152,13 +155,27 @@ void SampleTestCase() //sheet ex 2
         double[] costBell = new double[size];
         double[][] costFloyd = new double[size][size];
         Integer[][] predecessors = new Integer[size][size];
-        TestResult testResultNormalDijkstra = Helper.testAlgorithm(graph, source, costNormal, parent, "dijkstra");
-        TestResult testResultOptimalDijkstra = Helper.testAlgorithm(graph, source, costOptimal, parent, "optimalDijkstra");
-        TestResult testResultBellman = Helper.testAlgorithm(graph, source, costBell, parentBell, "bellman");
+        double totalTimeNormal = 0;
+        double totalTimeOptimal = 0;
+        double totalTimeBellman = 0;
         TestResult testResultFloyd = Helper.testAlgorithm(graph,costFloyd,predecessors);
-        System.out.println("Total time for Large graph Using Normal Dijkstra: " + testResultNormalDijkstra.spendTime + " ms");
-        System.out.println("Total time for Large graph Using Optimal Dijkstra: " + testResultOptimalDijkstra .spendTime+ " ms");
-        System.out.println("Total time for Large graph Using Bellman-ford: " + testResultBellman.spendTime+ " ms");
+
+        for(int source =  0 ; source < size; source++){
+            TestResult testResultNormalDijkstra = Helper.testAlgorithm(graph, source, costNormal, parent, "dijkstra");
+            TestResult testResultOptimalDijkstra = Helper.testAlgorithm(graph, source, costOptimal, parent, "optimalDijkstra");
+            TestResult testResultBellman = Helper.testAlgorithm(graph, source, costBell, parentBell, "bellman");
+            totalTimeNormal += testResultNormalDijkstra.spendTime;
+            totalTimeOptimal += testResultOptimalDijkstra.spendTime;
+            totalTimeBellman += testResultBellman.spendTime;
+            assertArrayEquals(costBell ,costFloyd[source] , "Test Fails With at Source "+source +" BellMan-Ford");
+            assertArrayEquals(costNormal ,costFloyd[source],"Test Fails With at Source "+source +" Dijkstra-Normal");
+            assertArrayEquals(costOptimal ,costFloyd[source],"Test Fails With at Source "+source +" Dijkstra-Optimal");
+        }
+
+
+        System.out.println("Total time for Large graph Using Normal Dijkstra: " + totalTimeNormal+ " ms");
+        System.out.println("Total time for Large graph Using Optimal Dijkstra: " + totalTimeOptimal + " ms");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + totalTimeBellman+ " ms");
         System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
 
     }
