@@ -1,9 +1,14 @@
 import org.example.Graph;
 import org.example.Helper;
+import org.example.ShortestPath;
 import org.example.TestResult;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ComparisonTest {
 
@@ -61,7 +66,7 @@ void APSP(){
 
 }
 @Test
-void testOne()
+void SampleTestCase() //sheet ex 2
 {
         int size = 6;
         Graph graph = new Graph(size);
@@ -157,10 +162,69 @@ void testOne()
         System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
 
     }
+    @Test
+    void NegativeEdge() { // sheet example 1
+        System.out.println("===================================================== Graph with Negative Edges Test ==================================================================");
+        int source = 0;
+        Graph graph = new Graph(7);
+        graph.addEdge(0, 1, 2.0);
+        graph.addEdge(0, 2, 7.0);
+        graph.addEdge(0, 4, 12.0);
+        graph.addEdge(2, 1, 3.0);
+        graph.addEdge(1, 3, 2.0);
+        graph.addEdge(2, 3, -1.0);
+        graph.addEdge(2, 4, 2.0);
+        graph.addEdge(3, 5, 2.0);
+        graph.addEdge(4, 6, -7.0);
+        graph.addEdge(5, 6, 2.0);
+        graph.addEdge(4, 0, -4.0);
+        graph.addEdge(6, 3, 1.0);
+
+        double[][] costBellman = new double[7][7];
+        double[][] costFloyd = new double[7][7];
+        Integer[][] precBellman = new Integer[7][7];
+        Integer[][] precFloyd = new Integer[7][7];
+
+        TestResult floydTestResult = Helper.testAlgorithm(graph,costFloyd, precFloyd);
+        double bellmanTime = 0;
+        for(int i = 0;i<7;i++){
+            TestResult test =  Helper.testAlgorithm(graph,i,costBellman[i],precBellman[i],"bellman");
+            bellmanTime+=test.spendTime;
+        }
+        for(int i=0;i<7;i++){
+            assertArrayEquals(costBellman[i],costFloyd[i]);
+            assertArrayEquals(precBellman[i],precFloyd[i]);
+        }
+        Helper.printResultComparsion(7,costBellman,costFloyd,precBellman,precFloyd);
+        System.out.println("Total time for graph Using Bellman-ford: " + bellmanTime+ " ms");
+        System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
+    }
 
 
-@Test
-void UnWeightEdges(){
+    @Test
+    void hello(){
+        double[][] adjList = {
+                {0, 32, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 3, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 3, 0, 0, 0},
+                {0, 0, 0, 3, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0},
+                {43, 0, 0, 0, 0, 0, 2, 55, 0, 3, 0, 0, 0, 0, 0, 0},
+                {0, 3, 0, 2, 5, 0, 0, 0, 0, 0, 3, 2, 0, 0, 0, 0},
+                {0, 2, 0, 1, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 1, 0, 0, 0, 2, 32, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 35, 32, 0, 1, 2, 0},
+                {0, 0, 0, 4, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0},
+                {0, 0, 0, 0, 0, 0, 3, 0, 2, 0, 0}
+        };
+//        ArrayList<ArrayList<E>>
+//        Graph graph = new Graph(15,adjList,new ArrayList<>());
+//        for(int i =0 ;i<15;i++)
 
-}
+
+
+    }
 }

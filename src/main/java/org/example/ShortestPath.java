@@ -11,7 +11,11 @@ public class ShortestPath {
 
 
     public static List<Integer> getPath(int start, int end, Integer[][] predecessors) {
-
+        if(start == end){
+            ArrayList<Integer> path = new ArrayList<>();
+            path.add(start);
+            return path;
+        }
         if (predecessors[start][end] == null) {
             return null;
         }
@@ -26,7 +30,11 @@ public class ShortestPath {
         return path;
     }
     public static List<Integer> getPath(int start, int end, Integer [] parent) {
-
+        if(start == end){
+            ArrayList<Integer> path = new ArrayList<>();
+            path.add(start);
+            return path;
+        }
         if (parent[end] == null) { // no path found
             return null;
         }

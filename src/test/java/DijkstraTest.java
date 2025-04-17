@@ -93,10 +93,6 @@ public class DijkstraTest {
         System.out.println("Using Optimal Dijkstra => " + testResultOptimalDijkstra.stringTime);
         System.out.println("Using Normal Dijkstra => " + testResultNormalDijkstra.stringTime);
 
-        for(int i = 0; i < 4; i++) {
-            System.out.println("Distance From Source to " + i + " Equal = " + costNormal[i]);
-            ShortestPath.printPath(ShortestPath.getPath(0, i, parent));
-        }
     }
 
     @Test
