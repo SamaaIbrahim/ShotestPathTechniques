@@ -86,10 +86,45 @@ public class Graph {
     public void dijkestra(int s, double[] cost, Integer[] parent){
         Arrays.fill(parent,null); // parent[i] = null -> unreached
 
+
     }
     public boolean BellmanFord(int s,double[] cost,Integer[] parent){
         Arrays.fill(parent,null); // parent[i] = null -> unreached
-        return true;
+        Arrays.fill (cost,Double.POSITIVE_INFINITY);
+        cost[s]=0;
+        for(int i = 0 ; i < n-1 ; i++){
+            for( ArrayList<Edge> vertexEdge: this.edgeList){
+                for(Edge e : vertexEdge){
+                    int from = e.from;
+                    int to =e.to;
+                    double weight = e.cost;
+                    if(  cost[from] + weight < cost[to]){// Relax Edge
+                        cost[to]=cost[from]+weight;
+                        parent[to]=from;
+
+                    }
+
+                }
+            }
+        }
+        for(int i = 0 ; i < n-1 ; i++){
+            for( ArrayList<Edge> vertexEdge: this.edgeList){
+                for(Edge e : vertexEdge){
+                    int from = e.from;
+                    int to =e.to;
+                    double weight = e.cost;
+                    if( cost[from] + weight < cost[to]){
+                        this.containNegativeCycle=true;
+                        return true;
+
+                    }
+
+                }
+            }
+        }
+
+
+        return false;
     }
     public boolean Floyd(double[][] cost,Integer[][] predecessors){
         //initialize
@@ -135,8 +170,42 @@ public class Graph {
         
         return true;
     }
+    public  static  void BellmanFordTest(){
+        int n = 4;
+        Graph g = new Graph(n);
+
+       /* // Add edges
+        g.addEdge(0, 3, 2.0);  // 0 -> 3
+        g.addEdge(0, 1, 4.0);  // 0 -> 1
+        g.addEdge(4, 2, 8.0);  // 4 -> 2
+        g.addEdge(1, 3, 5.0);  // 1 -> 3
+        g.addEdge(3, 2, 1.0);  // 3 -> 2
+        g.addEdge(2, 4, 3.0);  // 2 -> 4
+        g.addEdge(3, 4, 7.0);  // 3 -> 4
+        */
+
+        g.addEdge(0, 1, 1);     // 0 → 1 (1)
+        g.addEdge(1, 2, -1);    // 1 → 2 (-1)
+        g.addEdge(2, 3, -1);    // 2 → 3 (-1)
+        g.addEdge(3, 1, -1);    // 3 → 1 (-1) → forms negative cycle
 
 
+        double[] cost2 = new double[n];
+        Integer[] parent = new Integer[n];
+        g.BellmanFord(0, cost2, parent);
+        System.out.println( g.containNegativeCycle?("Graph has Negative Cycle"):("Graph does not have Negative Cycle"));
+        if(!g.containNegativeCycle){
+            for (int i = 0 ; i < n ;i ++ ){
+                System.out.println("Distance From Source to "+ i+" Equal =  "+ cost2[i]);
+                System.out.println("Parent of "+i+" Is = "+ parent[i]);
+                ShortestPath.printPath (ShortestPath.getPath(0,i,parent));
+
+            }
+        }
+
+
+
+    }
     public static void floydTest() {
         Graph g = new Graph(5);
         // Add more edges to make a comprehensive test case
@@ -152,6 +221,7 @@ public class Graph {
         Integer[][] predecessors = new Integer[5][5];
 
         g.Floyd(cost, predecessors);
+
 
         System.out.println("Cost matrix after Floyd algorithm:");
         for(double[] a : cost) {
@@ -207,8 +277,10 @@ public class Graph {
 
 
     public static void main(String[] args) {
-        floydTest();
-        constructorFileTest();
+//        floydTest();
+//        constructorFileTest();
+        BellmanFordTest();
+
 
     }
 

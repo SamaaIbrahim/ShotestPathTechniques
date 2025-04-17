@@ -3,6 +3,7 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ public class ShortestPath {
 
 
     public static List<Integer> getPath(int start, int end, Integer[][] predecessors) {
+
         if (predecessors[start][end] == null) {
             return null;
         }
@@ -24,6 +26,7 @@ public class ShortestPath {
         return path;
     }
     public static List<Integer> getPath(int start, int end, Integer [] parent) {
+
         if (parent[end] == null) { // no path found
             return null;
         }
@@ -32,12 +35,14 @@ public class ShortestPath {
         path.add(end);
 
         while (end != start) {
+
             end = parent[end];
             path.addFirst(end);
+
         }
         return path;
     }
-    public void printPath(List<Integer> path){
+    public static void printPath(List<Integer> path){
         if(path == null){
             System.out.println("No Path Exist");
         }else{
