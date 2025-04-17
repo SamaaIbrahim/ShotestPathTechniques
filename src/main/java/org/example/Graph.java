@@ -9,8 +9,8 @@ public class Graph {
     double[][] adjMatrix;
     ArrayList<ArrayList<Edge>> edgeList;
 
-    boolean containNegativeEdge;
-    boolean containNegativeCycle;
+     public boolean containNegativeEdge;
+     public boolean containNegativeCycle;
 
     public Graph(int n, double[][] adjMatrix, ArrayList<ArrayList<Edge>> edgeList, boolean containNegativeEdge, boolean containNegativeCycle) {
         this.n = n;
@@ -111,7 +111,7 @@ public class Graph {
 
 
     }
-    public void optdijkestra(int s, double[] cost, Integer[] parent){
+    public void optDijkestra(int s, double[] cost, Integer[] parent){
         int n=cost.length;
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill(cost, Double.POSITIVE_INFINITY);
@@ -141,6 +141,43 @@ public class Graph {
 
 
         }}
+    public void NotoptDijkestra(int s, double[] cost, Integer[] parent) {
+        Arrays.fill(parent,null);
+        Arrays.fill(cost, Double.POSITIVE_INFINITY);
+        cost[s] = 0.0;
+        boolean[] visited = new boolean[this.n];
+        Arrays.fill(visited, false);
+
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(node -> node.distance));
+        Node n = new Node(s, 0);
+        pq.add(n);
+
+
+        while (!pq.isEmpty()) {
+            Node current = pq.remove();
+
+            if (visited[current.index]) {
+                continue;
+            }
+
+
+            for (Edge e : this.edgeList.get(current.index)) {
+                double oldDist = cost[e.to];
+                if (current.distance + e.cost < cost[e.to]) {
+                    cost[e.to] = current.distance + e.cost;
+                    parent[e.to]=e.from;
+                    Node newNode = new Node(e.to, cost[e.to]);
+                    pq.add(newNode);
+                }
+            }
+
+            visited[current.index] = true;
+
+        }
+
+
+
+    }
     public boolean BellmanFord(int s,double[] cost,Integer[] parent){
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill (cost,Double.POSITIVE_INFINITY);
@@ -168,7 +205,7 @@ public class Graph {
                     double weight = e.cost;
                     if( cost[from] + weight < cost[to]){
                         this.containNegativeCycle=true;
-                        return true;
+                        return false;
 
                     }
 
@@ -177,7 +214,7 @@ public class Graph {
         }
 
 
-        return false;
+        return true;
     }
     public boolean Floyd(double[][] cost,Integer[][] predecessors){
         //initialize
@@ -255,7 +292,8 @@ public class Graph {
         for (int i=0;i<g.n;i++){
             System.out.println("the cost from 0 to "+i+" is "+cost[i]);
         }
-        g.optdijkestra(0, cost, parent);
+
+        g.optDijkestra(0, cost, parent);
         System.out.println("using optimized Dijkstra");
         for (int i=0;i<g.n;i++){
             System.out.println("the cost from 0 to "+i+" is "+cost[i]);
