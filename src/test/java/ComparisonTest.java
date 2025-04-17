@@ -3,6 +3,8 @@ import org.example.Helper;
 import org.example.TestResult;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ComparisonTest {
 
 @Test
@@ -58,6 +60,40 @@ void APSP(){
 
 
 }
+@Test
+void testOne()
+{
+        int size = 6;
+        Graph graph = new Graph(size);
+        graph.addEdge(1, 2, 3);
+        graph.addEdge(1, 3, 8);
+        graph.addEdge(1, 5, -4);
+        graph.addEdge(2, 5, 7);
+        graph.addEdge(2, 4, 1);
+        graph.addEdge(3, 2, 4);
+        graph.addEdge(3, 4, -5);
+        graph.addEdge(4, 1, 2);
+        graph.addEdge(5, 4, 6);
+
+        double[][] costFloyd = new double[size][size];
+        Integer[][] predecessors = new Integer[size][size];
+        TestResult testResultFloyd = Helper.testAlgorithm(graph,costFloyd,predecessors);
+        double totalTime=0;
+        for(int i =0 ;i<size;i++){
+            Integer[] parentBell = new Integer[size];
+            double[] costBell = new double[size];
+            TestResult testResultBellman = Helper.testAlgorithm(graph, i, costBell, parentBell, "bellman");
+            totalTime+=testResultBellman.spendTime;
+            assertArrayEquals(costBell,costFloyd[i],"Failed at source " + i);
+        }
+
+
+        System.out.println("Total time for Test One Using Bellman-ford: " +totalTime+ " ms");
+        System.out.println("Total time for Test One Using Floyd: " + testResultFloyd.spendTime + " ms");
+
+
+    }
+
 @Test
     void SSP(){
     System.out.println("=============================================================== SSP TEST ============================================================");
