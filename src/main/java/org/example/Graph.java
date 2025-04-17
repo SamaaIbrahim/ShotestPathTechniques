@@ -1,10 +1,7 @@
 package org.example;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Graph {
     int n;
@@ -68,7 +65,7 @@ public class Graph {
         this.adjMatrix = new double[n][n];
         this.edgeList = new ArrayList<>(n);
         for(int i = 0; i < n; i++){
-           edgeList.add(new ArrayList<>());
+            edgeList.add(new ArrayList<>());
         }
     }
     public void addEdge(int from,int to ,double cost){
@@ -82,12 +79,68 @@ public class Graph {
         edgeList.get(from).add(new Edge(from,to,cost));
 
     }
-
-    public void dijkestra(int s, double[] cost, Integer[] parent){
+    public void dijkestra(int s,double[] cost ,Integer[] parent){
+        int n=cost.length;
         Arrays.fill(parent,null); // parent[i] = null -> unreached
+        Arrays.fill(cost, Double.POSITIVE_INFINITY);
+        cost[s]=0.0;
+        Boolean[]Sure=new Boolean[n];
+        Arrays.fill(Sure, false);
+
+        for (int i=0;i<this.n;i++){
+            //get the index with the smallest cost
+            double minCost = Double.POSITIVE_INFINITY;
+            int v=-1;
+            for (int j = 0; j < n; j++) {
+                if (!Sure[j] && cost[j] < minCost) {
+                    minCost = cost[j];
+                    v = j;
+                }
+
+            }
+            if(v==-1) break;
+            Sure[v]=true;
+            for(Edge edge: this.edgeList.get(v)){
+                int to=edge.to,from=edge.from;double weight=edge.cost;
+                if(!Sure[to]&& weight+cost[from]<cost[to]) {
+                    cost[to] = weight + cost[from];
+                    parent[to]=from;
+                }
+            }
+        }
 
 
     }
+    public void optdijkestra(int s, double[] cost, Integer[] parent){
+        int n=cost.length;
+        Arrays.fill(parent,null); // parent[i] = null -> unreached
+        Arrays.fill(cost, Double.POSITIVE_INFINITY);
+        cost[s]=0.0;
+        IndexPriorityQueue ipq=new IndexPriorityQueue(n);
+        ipq.insertInPq(s,cost[s]);
+        HashMap<Integer,Boolean> Sure=new HashMap<>();
+        for(int i=0;i<n;i++){
+            Sure.put(i,false);
+        }
+
+        while (!ipq.isEmpty()){
+            int ver=ipq.poll();
+            Sure.put(ver,true);
+            for(Edge edge: this.edgeList.get(ver)){
+                int to=edge.to,from=edge.from;double weight=edge.cost;
+                if(!Sure.get(to)&& weight+cost[from]<cost[to]) {
+                    cost[to] = weight + cost[from];
+                    parent[to]=from;
+                    if (ipq.contains(to)) {
+                        ipq.change(to, cost[to]);
+                    } else {
+                        ipq.insertInPq(to, cost[to]);
+                    }
+                }
+            }
+
+
+        }}
     public boolean BellmanFord(int s,double[] cost,Integer[] parent){
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill (cost,Double.POSITIVE_INFINITY);
@@ -167,8 +220,46 @@ public class Graph {
                 }
             }
         }
-        
+
         return true;
+    }
+    public static void DijkstraTest() {
+        Graph g = new Graph(5);
+//        g.addEdge(0, 1, 2);   // A -> B
+//        g.addEdge(0, 2, 7);   // A -> C
+//        g.addEdge(2, 1, 3);   // C -> B
+//        g.addEdge(1, 3, 2);   // B -> D
+//        g.addEdge(2, 3, -1);  // C -> D
+//        g.addEdge(2, 4, 2);   // C -> E
+//        g.addEdge(3, 5, 2);   // D -> F
+//        g.addEdge(0, 4, 12);  // A -> E
+//        g.addEdge(4, 0, -4);  // E -> A
+//        g.addEdge(4, 6, -7);  // E -> G
+//        g.addEdge(5, 6, 2);   // F -> G
+//        g.addEdge(6, 3, 1);   // G -> D
+//
+        g.addEdge(0, 1, 10);
+        g.addEdge(0, 4, 5);
+        g.addEdge(1, 2, 1);
+        g.addEdge(1, 4, 2);
+        g.addEdge(2, 3, 4);
+        g.addEdge(3, 0, 7);
+        g.addEdge(4, 1, 3);
+        g.addEdge(4, 2, 9);
+        g.addEdge(4, 3, 2);
+        double[] cost = new double[g.n];
+        Integer[] parent = new Integer[g.n];
+        g.dijkestra(0, cost, parent);
+        System.out.println("using normal Dijkstra");
+
+        for (int i=0;i<g.n;i++){
+            System.out.println("the cost from 0 to "+i+" is "+cost[i]);
+        }
+        g.optdijkestra(0, cost, parent);
+        System.out.println("using optimized Dijkstra");
+        for (int i=0;i<g.n;i++){
+            System.out.println("the cost from 0 to "+i+" is "+cost[i]);
+        }
     }
     public  static  void BellmanFordTest(){
         int n = 4;
@@ -198,13 +289,8 @@ public class Graph {
             for (int i = 0 ; i < n ;i ++ ){
                 System.out.println("Distance From Source to "+ i+" Equal =  "+ cost2[i]);
                 System.out.println("Parent of "+i+" Is = "+ parent[i]);
-                ShortestPath.printPath (ShortestPath.getPath(0,i,parent));
-
-            }
+                ShortestPath.printPath (ShortestPath.getPath(0,i,parent));}
         }
-
-
-
     }
     public static void floydTest() {
         Graph g = new Graph(5);
@@ -221,7 +307,6 @@ public class Graph {
         Integer[][] predecessors = new Integer[5][5];
 
         g.Floyd(cost, predecessors);
-
 
         System.out.println("Cost matrix after Floyd algorithm:");
         for(double[] a : cost) {
@@ -277,10 +362,10 @@ public class Graph {
 
 
     public static void main(String[] args) {
-//        floydTest();
-//        constructorFileTest();
-        BellmanFordTest();
-
+//       floydTest();
+   // constructorFileTest();
+//       DijkstraTest();
+       // BellmanFordTest();
 
     }
 
