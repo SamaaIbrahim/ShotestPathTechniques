@@ -79,7 +79,7 @@ public class Graph {
         edgeList.get(from).add(new Edge(from,to,cost));
 
     }
-    public void dijkestra(int s,double[] cost ,Integer[] parent){
+    public void lazyDijkestra(int s,double[] cost ,Integer[] parent){
         int n=cost.length;
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill(cost, Double.POSITIVE_INFINITY);
@@ -111,7 +111,7 @@ public class Graph {
 
 
     }
-    public void optDijkestra(int s, double[] cost, Integer[] parent){
+    public void dijkestra(int s, double[] cost, Integer[] parent){
         int n=cost.length;
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill(cost, Double.POSITIVE_INFINITY);
@@ -293,7 +293,7 @@ public class Graph {
             System.out.println("the cost from 0 to "+i+" is "+cost[i]);
         }
 
-        g.optDijkestra(0, cost, parent);
+        g.dijkestra(0, cost, parent);
         System.out.println("using optimized Dijkstra");
         for (int i=0;i<g.n;i++){
             System.out.println("the cost from 0 to "+i+" is "+cost[i]);
