@@ -141,7 +141,7 @@ public class Graph {
 
 
         }}
-    public void NotoptDijkestra(int s, double[] cost, Integer[] parent) {
+    public void notOptimalDijkestra(int s, double[] cost, Integer[] parent) {
         Arrays.fill(parent,null);
         Arrays.fill(cost, Double.POSITIVE_INFINITY);
         cost[s] = 0.0;
@@ -401,9 +401,9 @@ public class Graph {
 
     public static void main(String[] args) {
 //       floydTest();
-   // constructorFileTest();
+//       constructorFileTest();
 //       DijkstraTest();
-       // BellmanFordTest();
+//        BellmanFordTest();
 
     }
 

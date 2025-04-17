@@ -43,20 +43,5 @@ public class Helper {
         }
     }
 
-//    public static void printResultComparsion(int n,double[][]costBellman,double[][]costFloyd,Integer[][]precBellman,Integer[][]precFloyd){
-//        for(int i=0;i<n;i++){
-//            System.out.println("from " + i);
-//            System.out.println("Bellman");
-//            for(int j =0 ;j<n;j++){
-//                System.out.print("to : "+ j+" " + costBellman[i][j]+" ");
-//                ShortestPath.printPath(ShortestPath.getPath(i,j,precBellman[i]));
-//            }
-//            System.out.println("Floyd");
-//            for(int j =0 ;j<7;j++){
-//                System.out.print("to : "+ j+ " " + costBellman[i][j]+" ");
-//                ShortestPath.printPath(ShortestPath.getPath(i,j,precFloyd[i]));
-//            }
-//        }
-//    }
 
 }

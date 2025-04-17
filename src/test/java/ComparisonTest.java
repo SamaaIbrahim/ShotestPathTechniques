@@ -13,6 +13,7 @@ public class ComparisonTest {
 void APSP(){
     System.out.println("============================================================= APSP TEST =========================================================================");
     int size = 5;
+    System.out.println("Graph Size : " + size);
     Graph graph = new Graph(size);
     graph.addEdge(0, 1, 2);
     graph.addEdge(0, 3, 8);
@@ -66,7 +67,9 @@ void APSP(){
 @Test
 void SampleTestCase() //sheet ex 2
 {
+    System.out.println("===================================================== Graph with Negative Edges Test 2 ==================================================================");
         int size = 6;
+    System.out.println("Graph Size : " + size);
         Graph graph = new Graph(size);
         graph.addEdge(1, 2, 3);
         graph.addEdge(1, 3, 8);
@@ -82,17 +85,24 @@ void SampleTestCase() //sheet ex 2
         Integer[][] predecessors = new Integer[size][size];
         TestResult testResultFloyd = Helper.testAlgorithm(graph,costFloyd,predecessors);
         double totalTime=0;
+        double singleSourceBelman = 0;
         for(int i =0 ;i<size;i++){
             Integer[] parentBell = new Integer[size];
             double[] costBell = new double[size];
             TestResult testResultBellman = Helper.testAlgorithm(graph, i, costBell, parentBell, "bellman");
             totalTime+=testResultBellman.spendTime;
+            singleSourceBelman = Math.max(testResultBellman.spendTime,singleSourceBelman);
             assertArrayEquals(costBell,costFloyd[i],"Failed at source " + i);
+            assertArrayEquals(parentBell,predecessors[i]);
         }
 
 
-        System.out.println("Total time for Test One Using Bellman-ford: " +totalTime+ " ms");
-        System.out.println("Total time for Test One Using Floyd: " + testResultFloyd.spendTime + " ms");
+    System.out.println("Single Source");
+    System.out.println("Total time for Large graph Using Bellman-ford: " + singleSourceBelman+ " ms");
+    System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
+    System.out.println("All Pairs");
+    System.out.println("Total time for Large graph Using Bellman-ford: " + totalTime+ " ms");
+    System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
 
 
     }
@@ -102,6 +112,7 @@ void SampleTestCase() //sheet ex 2
     System.out.println("=============================================================== SSP TEST ============================================================");
     int source = 0;
     int size = 5;
+    System.out.println("Graph Size : " + size);
     Graph graph = new Graph(size);
     graph.addEdge(0, 1, 10);
     graph.addEdge(0, 2, 5);
@@ -132,6 +143,7 @@ void SampleTestCase() //sheet ex 2
     void largeGraphTest() {
         System.out.println("===================================================== Large Graph Test ======================================================================");
         int size = 1000;
+        System.out.println("Graph Size : " + size);
 
         Graph graph = new Graph(size);
 
@@ -146,6 +158,8 @@ void SampleTestCase() //sheet ex 2
         TestResult testResultFloyd = Helper.testAlgorithm(graph,costFloyd,predecessors);
         double totalTimeOptimal = 0;
         double totalTimeBellman = 0;
+        double singleSourceOptimal = 0;
+        double singleSourceBelman = 0;
 
         for(int source =  0 ; source < size; source++){
             Integer[] parent = new Integer[size];
@@ -156,12 +170,17 @@ void SampleTestCase() //sheet ex 2
             TestResult testResultBellman = Helper.testAlgorithm(graph, source, costBell, parentBell, "bellman");
             totalTimeOptimal += testResultOptimalDijkstra.spendTime;
             totalTimeBellman += testResultBellman.spendTime;
+            singleSourceOptimal = Math.max(singleSourceOptimal,testResultOptimalDijkstra.spendTime);
+            singleSourceBelman = Math.max(singleSourceBelman,testResultBellman.spendTime);
             assertArrayEquals(costBell ,costFloyd[source] , "Test Fails With at Source "+source +" BellMan-Ford");
             assertArrayEquals(costOptimal ,costFloyd[source],"Test Fails With at Source "+source +" Dijkstra");
 
         }
-
-
+        System.out.println("Single Source");
+        System.out.println("Total time for Large graph Using Dijkstra: " + singleSourceOptimal + " ms");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + singleSourceBelman+ " ms");
+        System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
+        System.out.println("All Pairs");
         System.out.println("Total time for Large graph Using Dijkstra: " + totalTimeOptimal + " ms");
         System.out.println("Total time for Large graph Using Bellman-ford: " + totalTimeBellman+ " ms");
         System.out.println("Total time for Large graph Using Floyd: " + testResultFloyd.spendTime + " ms");
@@ -172,6 +191,7 @@ void SampleTestCase() //sheet ex 2
         System.out.println("===================================================== Graph with Negative Edges Test ==================================================================");
         int source = 0;
         Graph graph = new Graph(7);
+        System.out.println("Graph Size : " + 7);
         graph.addEdge(0, 1, 2.0);
         graph.addEdge(0, 2, 7.0);
         graph.addEdge(0, 4, 12.0);
@@ -191,24 +211,30 @@ void SampleTestCase() //sheet ex 2
         Integer[][] precFloyd = new Integer[7][7];
 
         TestResult floydTestResult = Helper.testAlgorithm(graph,costFloyd, precFloyd);
-        double bellmanTime = 0;
+        double totalTime=0;
+        double singleSourceBelman = 0;
         for(int i = 0;i<7;i++){
             TestResult test =  Helper.testAlgorithm(graph,i,costBellman[i],precBellman[i],"bellman");
-            bellmanTime+=test.spendTime;
+            totalTime+=test.spendTime;
+            singleSourceBelman = Math.max(singleSourceBelman,test.spendTime);
         }
         for(int i=0;i<7;i++){
             assertArrayEquals(costBellman[i],costFloyd[i]);
             assertArrayEquals(precBellman[i],precFloyd[i]);
         }
-     //   Helper.printResultComparsion(7,costBellman,costFloyd,precBellman,precFloyd);
-        System.out.println("Total time for graph Using Bellman-ford: " + bellmanTime+ " ms");
+        System.out.println("Single Source");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + singleSourceBelman+ " ms");
+        System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
+        System.out.println("All Pairs");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + totalTime+ " ms");
         System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
     }
 
 
     @Test
-    void hello(){
-
+    void correctnessComaparsion(){
+        System.out.println("===================================================== Large Graph Correctness Test ==================================================================");
+        System.out.println("Graph Size : " + 15);
         double[][] adjMatrix = {
                 {0, 32, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -270,27 +296,32 @@ void SampleTestCase() //sheet ex 2
         Integer[][] precdijkestra = new Integer[15][15];
 
         TestResult floydTestResult = Helper.testAlgorithm(graph,costFloyd, precFloyd);
-        double bellmanTime = 0;
-        double dijkestraTime = 0;
+        double totalTimeOptimal = 0;
+        double totalTimeBellman = 0;
+        double singleSourceOptimal = 0;
+        double singleSourceBelman = 0;
         for(int i = 0;i<15;i++){
             TestResult test =  Helper.testAlgorithm(graph,i,costBellman[i],precBellman[i],"bellman");
-            bellmanTime+=test.spendTime;
+            totalTimeBellman+=test.spendTime;
+            singleSourceBelman =  Math.max(singleSourceBelman,test.spendTime);
             TestResult test2  = Helper.testAlgorithm(graph,i,costDijkesrtra[i],precdijkestra[i],"optimalDijkstra");
-            dijkestraTime+= test2.spendTime;
+            totalTimeOptimal+= test2.spendTime;
+            singleSourceOptimal = Math.max(singleSourceOptimal,test2.spendTime);
         }
         for(int i=0;i<15;i++){
             assertArrayEquals(costBellman[i],cost[i]);
             assertArrayEquals(costDijkesrtra[i],cost[i]);
             assertArrayEquals(costFloyd[i],cost[i]);
+
         }
-        System.out.println("Total time for Large graph Using Optimal Dijkstra: " + dijkestraTime+ " ms");
-        System.out.println("Total time for graph Using Bellman-ford: " + bellmanTime+ " ms");
+        System.out.println("Single Source");
+        System.out.println("Total time for Large graph Using Dijkstra: " + singleSourceOptimal + " ms");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + singleSourceBelman+ " ms");
         System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
-
-
-
-
-
+        System.out.println("All Pairs");
+        System.out.println("Total time for Large graph Using Dijkstra: " + totalTimeOptimal + " ms");
+        System.out.println("Total time for Large graph Using Bellman-ford: " + totalTimeBellman+ " ms");
+        System.out.println("Total time for Large graph Using Floyd: " + floydTestResult.spendTime + " ms");
 
     }
 }
