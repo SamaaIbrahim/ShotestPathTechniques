@@ -233,7 +233,7 @@ void SampleTestCase() //sheet ex 2
 
     @Test
     void correctnessComaparsion(){
-        System.out.println("===================================================== Large Graph Correctness Test ==================================================================");
+        System.out.println("=====================================================  Graph Correctness Test ==================================================================");
         System.out.println("Graph Size : " + 15);
         double[][] adjMatrix = {
                 {0, 32, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},

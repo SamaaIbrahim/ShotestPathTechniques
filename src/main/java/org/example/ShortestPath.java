@@ -93,7 +93,7 @@ public class ShortestPath {
             while(true){
                 if(!graph.BellmanFord(0,new double[graph.n],new Integer[graph.n])){
                     System.out.println("Graph contain -ve Cycle");
-                    continue;
+                    break;
                 }
                 String input;
                 do{

@@ -141,43 +141,6 @@ public class Graph {
 
 
         }}
-    public void notOptimalDijkestra(int s, double[] cost, Integer[] parent) {
-        Arrays.fill(parent,null);
-        Arrays.fill(cost, Double.POSITIVE_INFINITY);
-        cost[s] = 0.0;
-        boolean[] visited = new boolean[this.n];
-        Arrays.fill(visited, false);
-
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(node -> node.distance));
-        Node n = new Node(s, 0);
-        pq.add(n);
-
-
-        while (!pq.isEmpty()) {
-            Node current = pq.remove();
-
-            if (visited[current.index]) {
-                continue;
-            }
-
-
-            for (Edge e : this.edgeList.get(current.index)) {
-                double oldDist = cost[e.to];
-                if (current.distance + e.cost < cost[e.to]) {
-                    cost[e.to] = current.distance + e.cost;
-                    parent[e.to]=e.from;
-                    Node newNode = new Node(e.to, cost[e.to]);
-                    pq.add(newNode);
-                }
-            }
-
-            visited[current.index] = true;
-
-        }
-
-
-
-    }
     public boolean BellmanFord(int s,double[] cost,Integer[] parent){
         Arrays.fill(parent,null); // parent[i] = null -> unreached
         Arrays.fill (cost,Double.POSITIVE_INFINITY);
@@ -312,12 +275,10 @@ public class Graph {
         g.addEdge(2, 4, 3.0);  // 2 -> 4
         g.addEdge(3, 4, 7.0);  // 3 -> 4
         */
-
         g.addEdge(0, 1, 1);     // 0 → 1 (1)
         g.addEdge(1, 2, -1);    // 1 → 2 (-1)
         g.addEdge(2, 3, -1);    // 2 → 3 (-1)
         g.addEdge(3, 1, -1);    // 3 → 1 (-1) → forms negative cycle
-
 
         double[] cost2 = new double[n];
         Integer[] parent = new Integer[n];
@@ -371,7 +332,6 @@ public class Graph {
         System.out.println("[null, null, 4, null, null]");
 
     }
-    // can use to test dijkestra and bellman ford and compare out
 
     public static void constructorFileTest(){
         Scanner in = new Scanner(System.in);
@@ -403,7 +363,7 @@ public class Graph {
 //       floydTest();
 //       constructorFileTest();
 //       DijkstraTest();
-//        BellmanFordTest();
+//       BellmanFordTest();
 
     }
 
